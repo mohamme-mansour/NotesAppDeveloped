@@ -35,7 +35,7 @@ public class NoteViewModel extends AndroidViewModel {
     }
 
 
-    public void insert(Note note) {
+    public void insertNote(Note note) {
         mNotesRepository.insertNote(note);
     }
 

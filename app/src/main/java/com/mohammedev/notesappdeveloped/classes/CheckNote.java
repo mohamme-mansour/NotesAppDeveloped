@@ -1,5 +1,7 @@
 package com.mohammedev.notesappdeveloped.classes;
 
+import android.graphics.Color;
+
 import androidx.room.Entity;
 
 import java.io.Serializable;

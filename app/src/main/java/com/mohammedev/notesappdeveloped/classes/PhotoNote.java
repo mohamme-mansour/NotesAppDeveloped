@@ -3,7 +3,9 @@ package com.mohammedev.notesappdeveloped.classes;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
 
+import androidx.databinding.BindingAdapter;
 import androidx.room.Entity;
 
 @Entity(tableName = "photoNotesTable")
@@ -58,6 +60,11 @@ public class PhotoNote extends Note implements Parcelable {
         parcel.writeString(note);
         parcel.writeInt(color);
         parcel.writeParcelable(image, i);
+    }
+
+    @BindingAdapter("android:imageUri")
+    public static void loadImage(ImageView imageView, Uri image){
+        imageView.setImageURI(image);
     }
 
 }

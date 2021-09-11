@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,8 @@ import com.mohammedev.notesappdeveloped.R;
 import com.mohammedev.notesappdeveloped.classes.CheckNote;
 import com.mohammedev.notesappdeveloped.classes.Note;
 import com.mohammedev.notesappdeveloped.classes.PhotoNote;
+import com.mohammedev.notesappdeveloped.databinding.ActivityMainBinding;
+import com.mohammedev.notesappdeveloped.databinding.ItemNoteBinding;
 import com.mohammedev.notesappdeveloped.extra.Constants;
 import com.mohammedev.notesappdeveloped.extra.ViewSpaces;
 import com.mohammedev.notesappdeveloped.room.ViewModels.NoteViewModel;
@@ -29,26 +32,24 @@ public class MainActivity extends AppCompatActivity {
 
     private NotesAdapter mNotesAdapter;
     private NoteViewModel mNoteViewModel;
+    ActivityMainBinding activityMainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        RecyclerView notesRecyclerView = findViewById(R.id.recycler_view_photos);
+        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+
 
         findViewById(R.id.floating_button_add).setOnClickListener(view -> startActivity(new Intent(MainActivity.this , AddNewNoteActivity.class)));
 
-
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2 ,1);
-
+        activityMainBinding.recyclerViewPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, 1));
+        activityMainBinding.recyclerViewPhotos.setHasFixedSize(true);
+        activityMainBinding.recyclerViewPhotos.addItemDecoration(new ViewSpaces(20));
 
         mNotesAdapter = new NotesAdapter(this, this::removeNote, this::editNote);
-
-        notesRecyclerView.setAdapter(mNotesAdapter);
-        notesRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        notesRecyclerView.addItemDecoration(new ViewSpaces(20));
 
         mNoteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         mNoteViewModel.getAllNotes().observe(this, notes -> mNotesAdapter.setNormalNotes(notes));
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mNoteViewModel.getAllCheckNote().observe(this, checkNotes -> mNotesAdapter.setCheckNotes(checkNotes));
 
-
+        activityMainBinding.recyclerViewPhotos.setAdapter(mNotesAdapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mNotesAdapter.notifyItemRemoved(position);
             }
-        }).attachToRecyclerView(notesRecyclerView);
+        }).attachToRecyclerView(activityMainBinding.recyclerViewPhotos);
     }
 
     private void removeNote(final int position) {

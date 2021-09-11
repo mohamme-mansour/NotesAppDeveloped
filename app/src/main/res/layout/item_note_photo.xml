@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="photoNote"
+            type="com.mohammedev.notesappdeveloped.classes.PhotoNote" />
+    </data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@{photoNote.color}">
 
     <ImageView
         android:id="@+id/imageView_photo_note"
@@ -13,6 +21,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
+        android:imageUri="@{photoNote.image}"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -23,8 +32,9 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="160dp"
         android:fontFamily="@font/cairo"
-        android:text="TextView"
+        android:text="@{photoNote.note}"
         android:textSize="18sp"
         android:textColor="#000"/>
 
 </androidx.cardview.widget.CardView>
+</layout>

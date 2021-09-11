@@ -261,7 +261,7 @@ public class AddNewNoteActivity extends AppCompatActivity implements Serializabl
 
     public void saveNote(){
 
-        if (yellowNote.isChecked() == false && !blueNote.isChecked() == false && !redNote.isChecked()== false) {
+        if (!yellowNote.isChecked() && !blueNote.isChecked() && !redNote.isChecked()) {
             Toast.makeText(this, R.string.didnt_choose_color, Toast.LENGTH_SHORT).show();
         }else {
             if (imageNoteRadio.isChecked()) {
@@ -291,7 +291,7 @@ public class AddNewNoteActivity extends AppCompatActivity implements Serializabl
                     Toast.makeText(this, R.string.Must_Enter_Text, Toast.LENGTH_SHORT).show();
                 } else {
                     Note note = new Note(cardViewColor, normalNoteText);
-                    mNoteViewModel.insert(note);
+                    mNoteViewModel.insertNote(note);
                     finish();
                 }
             }

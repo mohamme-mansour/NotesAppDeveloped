@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+
+        <variable
+            name="checkNote"
+            type="com.mohammedev.notesappdeveloped.classes.CheckNote" />
+
+        <variable
+            name="constant"
+            type="com.mohammedev.notesappdeveloped.extra.Constants" />
+
+    </data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@{checkNote.checkBox ? constant.GREEN_COLOR : checkNote.color}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +30,7 @@
             android:layout_marginStart="5dp"
             android:textColor="#000000"
             android:fontFamily="@font/cairo"
-            android:text="TextView"
+            android:text="@{checkNote.note}"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,9 +39,11 @@
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="@{checkNote.checkBox}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Note" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>
