@@ -1,19 +1,15 @@
 package com.mohammedev.notesappdeveloped.Adapters;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohammedev.notesappdeveloped.Listener.ItemClickListener;
@@ -31,7 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Serializable
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> implements Serializable
 {
 
     public List<Note> notesArray = new ArrayList<>();
@@ -45,7 +41,6 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.context = context;
         this.mItemLongClickListener = mItemLongClickListener;
         this.mItemClickListener = mItemClickListener;
-
     }
 
     @Override
@@ -54,57 +49,51 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Note note = notesArray.get(position);
         if (note instanceof PhotoNote)
             return Constants.PHOTO_NOTE;
-
         else if (note instanceof CheckNote)
             return Constants.CHECK_NOTE;
-
         else
             return Constants.NORMAL_NOTE;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ViewDataBinding binding;
         if (viewType == Constants.PHOTO_NOTE)
         {
-            ItemNotePhotoBinding itemNotePhotoBinding = DataBindingUtil.inflate(
+            binding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.getContext()), R.layout.item_note_photo , parent, false);
-            return new PhotoNoteViewHolder(itemNotePhotoBinding, mItemLongClickListener, mItemClickListener);
+            return new NotesViewHolder((ItemNotePhotoBinding) binding, mItemLongClickListener, mItemClickListener);
         }
         else if (viewType == Constants.CHECK_NOTE)
         {
-            ItemNoteCheckBinding itemNoteCheckBinding = DataBindingUtil.inflate(
+            binding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.getContext()), R.layout.item_note_check, parent, false);
-            return new CheckNoteViewHolder(itemNoteCheckBinding, mItemLongClickListener, mItemClickListener);
+            return new NotesViewHolder((ItemNoteCheckBinding) binding, mItemLongClickListener, mItemClickListener, ((ItemNoteCheckBinding) binding).checkBox);
         }
         else
         {
-            ItemNoteBinding itemNoteBinding = DataBindingUtil.inflate(
+            binding = DataBindingUtil.inflate(
                     LayoutInflater.from(parent.getContext()), R.layout.item_note, parent, false);
-            return new NotesViewHolder(itemNoteBinding, mItemLongClickListener, mItemClickListener);
+            return new NotesViewHolder((ItemNoteBinding) binding, mItemLongClickListener, mItemClickListener);
         }
     }
-
 
     @Override
-    public void onBindViewHolder (@NonNull final RecyclerView.ViewHolder holder, int position){
+    public void onBindViewHolder (@NonNull final NotesViewHolder holder, int position){
         final Note notesMain = notesArray.get(position);
-
         if (notesMain instanceof PhotoNote){
             PhotoNote photoNote = (PhotoNote) notesMain;
-            ((PhotoNoteViewHolder)holder).itemNotePhotoBinding.setPhotoNote(photoNote);
-            Toast.makeText(context, "this is a photoNote", Toast.LENGTH_SHORT).show();
+            holder.itemNotePhotoBinding.setPhotoNote(photoNote);
         }else if (notesMain instanceof CheckNote){
             CheckNote checkNote = (CheckNote) notesMain;
-            ((CheckNoteViewHolder)holder).itemNoteCheckBinding.setCheckNote(checkNote);
-            Toast.makeText(context, "this is a checkNote", Toast.LENGTH_SHORT).show();
+            holder.itemNoteCheckBinding.setCheckNote(checkNote);
         }else{
-            ((NotesViewHolder)holder).itemNoteBinding.setNote(notesMain);
-            Toast.makeText(context, "this is a photoNote", Toast.LENGTH_SHORT).show();
+            holder.itemNoteBinding.setNote(notesMain);
         }
+        holder.position = position;
 
     }
-
 
     @Override
     public int getItemCount()
@@ -117,98 +106,89 @@ public class NotesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    public static class NotesViewHolder extends RecyclerView.ViewHolder implements Serializable
-    {
+    public static class NotesViewHolder extends RecyclerView.ViewHolder implements Serializable{
+        private ItemNoteBinding itemNoteBinding;
+        private ItemNotePhotoBinding itemNotePhotoBinding;
+        private ItemNoteCheckBinding itemNoteCheckBinding;
         int position;
-        ItemNoteBinding itemNoteBinding;
+        CheckBox checkBox;
 
-        public NotesViewHolder(@NonNull ItemNoteBinding itemView, final ItemLongClickListener mItemLongClickListener, final ItemClickListener mItemClickListener)
-        {
-            super(itemView.getRoot());
-            itemNoteBinding = itemView;
+        public NotesViewHolder(ItemNoteBinding binding, ItemLongClickListener mItemLongClickListener, final ItemClickListener mItemClickListener){
+            super(binding.getRoot());
+            itemNoteBinding = binding;
 
-            itemNoteBinding.cardView.setOnLongClickListener(new View.OnLongClickListener()
-            {
+            itemNoteBinding.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view)
-                {
+                public boolean onLongClick(View v) {
                     mItemLongClickListener.onLongClickItem(position);
-
                     return false;
                 }
             });
 
-            itemNoteBinding.cardView.setOnClickListener(new View.OnClickListener()
-            {
+            itemNoteBinding.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view)
-                {
-                    mItemClickListener.onClickListener(position);
-                }
-            });
-
-        }
-    }
-
-    public static class PhotoNoteViewHolder extends RecyclerView.ViewHolder implements Serializable
-    {
-        ItemNotePhotoBinding itemNotePhotoBinding;
-        int position;
-        public PhotoNoteViewHolder(@NonNull ItemNotePhotoBinding itemView, final ItemLongClickListener mItemLongClickListener, final ItemClickListener mItemClickListener)
-        {
-            super(itemView.getRoot());
-            itemNotePhotoBinding = itemView;
-
-            itemNotePhotoBinding.cardView.setOnLongClickListener(new View.OnLongClickListener()
-            {
-                @Override
-                public boolean onLongClick(View view)
-                {
-                    mItemLongClickListener.onLongClickItem(position);
-
-                    return false;
-                }
-            });
-
-            itemNotePhotoBinding.cardView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
+                public void onClick(View v) {
                     mItemClickListener.onClickListener(position);
                 }
             });
         }
-    }
 
-    public static class CheckNoteViewHolder extends RecyclerView.ViewHolder implements Serializable
-    {
-        ItemNoteCheckBinding itemNoteCheckBinding;
-        int position;
-        public CheckNoteViewHolder(@NonNull ItemNoteCheckBinding itemView, ItemLongClickListener mItemLongClickListener, final ItemClickListener mItemClickListener)
-        {
-            super(itemView.getRoot());
-            itemNoteCheckBinding = itemView;
-
-            itemNoteCheckBinding.cardView.setOnLongClickListener(new View.OnLongClickListener()
-            {
+        public NotesViewHolder(ItemNotePhotoBinding binding, ItemLongClickListener mItemLongClickListener, final ItemClickListener mItemClickListener){
+            super(binding.getRoot());
+            itemNotePhotoBinding = binding;
+            itemNotePhotoBinding.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view)
-                {
+                public boolean onLongClick(View v) {
+
                     mItemLongClickListener.onLongClickItem(position);
 
                     return false;
                 }
             });
 
-            itemNoteCheckBinding.cardView.setOnClickListener(new View.OnClickListener()
-            {
+            itemNotePhotoBinding.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view)
-                {
+                public void onClick(View v) {
                     mItemClickListener.onClickListener(position);
                 }
             });
+        }
+
+        public NotesViewHolder(ItemNoteCheckBinding binding, ItemLongClickListener mItemLongClickListener, final ItemClickListener mItemClickListener, CheckBox checkBoxBind){
+            super(binding.getRoot());
+            itemNoteCheckBinding = binding;
+            checkBox = checkBoxBind;
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()){
+                        itemNoteCheckBinding.cardView.setCardBackgroundColor(Constants.GREEN_COLOR);
+                        itemNoteCheckBinding.getCheckNote().setCheckBox(true);
+                    }else
+                    {
+                        itemNoteCheckBinding.cardView.setCardBackgroundColor(itemNoteCheckBinding.getCheckNote().getColor());
+                        itemNoteCheckBinding.getCheckNote().setCheckBox(false);
+                    }
+                }
+            });
+
+            itemNoteCheckBinding.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    mItemLongClickListener.onLongClickItem(position);
+
+                    return false;
+                }
+            });
+
+            itemNoteCheckBinding.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemClickListener.onClickListener(position);
+                }
+            });
+
         }
     }
 
