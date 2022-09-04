@@ -8,7 +8,7 @@
 
         <variable
             name="constant"
-            type="com.mohammedev.notesappdeveloped.extra.Constants" />
+            type="com.mohammedev.notesappdeveloped.utils.Constants" />
 
     </data>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

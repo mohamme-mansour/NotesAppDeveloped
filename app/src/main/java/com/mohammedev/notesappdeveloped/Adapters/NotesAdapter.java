@@ -21,7 +21,7 @@ import com.mohammedev.notesappdeveloped.classes.PhotoNote;
 import com.mohammedev.notesappdeveloped.databinding.ItemNoteBinding;
 import com.mohammedev.notesappdeveloped.databinding.ItemNoteCheckBinding;
 import com.mohammedev.notesappdeveloped.databinding.ItemNotePhotoBinding;
-import com.mohammedev.notesappdeveloped.extra.Constants;
+import com.mohammedev.notesappdeveloped.utils.Constants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         }else{
             holder.itemNoteBinding.setNote(notesMain);
         }
-        holder.position = position;
+        holder.position = holder.getAdapterPosition();
 
     }
 
@@ -175,7 +175,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             itemNoteCheckBinding.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
                     mItemLongClickListener.onLongClickItem(position);
 
                     return false;
@@ -217,7 +216,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
                     }
                 }
             }
-
         }else{
             Toast.makeText(context, "Error Happened!", Toast.LENGTH_SHORT).show();
         }

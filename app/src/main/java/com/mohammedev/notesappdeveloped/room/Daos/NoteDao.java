@@ -29,6 +29,9 @@ public interface NoteDao {
     @Delete
     void delete(Note note);
 
+    @Query("SELECT * from notesTable LIMIT 1")
+    Note[] getAnyNote();
+
     @Query("SELECT * FROM photoNotesTable")
     LiveData<List<PhotoNote>> getAllPhotoNotes();
 

@@ -23,6 +23,8 @@ public class Note implements Serializable {
         this.note = note;
     }
 
+
+
     public int getId() {
         return id;
     }

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ConstraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
 
     <FrameLayout
         android:id="@+id/frameLayout"
@@ -14,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9">
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintCircleRadius="5dp">
 
     </FrameLayout>
 
@@ -124,6 +126,7 @@
         android:layout_height="0dp"
         android:layout_below="@+id/titleTextView"
         android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -134,7 +137,8 @@
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark">
 
             <ImageView
                 android:id="@+id/photoImageView"
@@ -170,6 +174,7 @@
         android:layout_height="0dp"
         android:layout_below="@+id/titleTextView"
         android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -180,6 +185,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:padding="8dp">
 
             <EditText
@@ -193,7 +199,9 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/cairo"
                 android:gravity="top"
-                android:hint="@string/add_note_text" />
+                android:hint="@string/add_note_text"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimary" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
@@ -215,6 +223,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"
             android:padding="8dp">
 
             <EditText
@@ -256,7 +265,6 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_submit"
-        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

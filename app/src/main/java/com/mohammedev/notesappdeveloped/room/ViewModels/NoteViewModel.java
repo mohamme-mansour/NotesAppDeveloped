@@ -77,6 +77,7 @@ public class NoteViewModel extends AndroidViewModel {
         mNotesRepository.updatePhotoNote(photoNote);
     }
 
+
     public LiveData<List<Note>> getAllNotes() {
         return mAllNotes;
     }

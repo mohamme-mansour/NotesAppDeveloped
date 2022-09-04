@@ -14,6 +14,7 @@ import com.mohammedev.notesappdeveloped.room.Daos.CheckNoteDao;
 import com.mohammedev.notesappdeveloped.room.Daos.NoteDao;
 import com.mohammedev.notesappdeveloped.room.Daos.PhotoNoteDao;
 import com.mohammedev.notesappdeveloped.room.NotesRoomDb;
+import com.mohammedev.notesappdeveloped.utils.AppExecutor;
 
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class NoteRepository {
 
     //insert
     public void insertNote(Note note) {
-            new InsertAsyncTaskNote(mNoteDao).execute(note);}
+        new InsertAsyncTaskNote(mNoteDao).execute(note);}
 
     public void deleteNote(Note note) {
         new DeleteAsyncTaskNote(mNoteDao).execute(note);}
@@ -119,6 +120,8 @@ public class NoteRepository {
         new DeleteAllAsyncTaskNote(mNoteDao).execute();
         new DeleteAllAsyncTaskPhotoNote(mPhotoNoteDao).execute();
     }
+
+
 
     private static class InsertAsyncTaskNote extends AsyncTask<Note, Void, Void> {
 
@@ -287,4 +290,5 @@ public class NoteRepository {
             return null;
         }
     }
+
 }

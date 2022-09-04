@@ -46,7 +46,7 @@ public class AddNewNoteActivity extends AppCompatActivity implements Serializabl
 
     private RadioButton normalNoteRadio;
     private RadioButton checkBoxNoteRadio;
-    private RadioButton imageNoteRadio;
+    private RadioButton photoNoteRadio;
 
     private RadioButton blueNote;
     private RadioButton redNote;
@@ -87,7 +87,7 @@ public class AddNewNoteActivity extends AppCompatActivity implements Serializabl
         redNote = findViewById(R.id.radioButton2);
         yellowNote = findViewById(R.id.radioButton);
 
-        imageNoteRadio = findViewById(R.id.radioButton4);
+        photoNoteRadio = findViewById(R.id.radioButton4);
         normalNoteRadio = findViewById(R.id.radioButton6);
         checkBoxNoteRadio = findViewById(R.id.radioButton5);
 
@@ -157,7 +157,7 @@ public class AddNewNoteActivity extends AppCompatActivity implements Serializabl
             }
         });
 
-        imageNoteRadio.setOnClickListener(new View.OnClickListener()
+        photoNoteRadio.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -264,7 +264,7 @@ public class AddNewNoteActivity extends AppCompatActivity implements Serializabl
         if (!yellowNote.isChecked() && !blueNote.isChecked() && !redNote.isChecked()) {
             Toast.makeText(this, R.string.didnt_choose_color, Toast.LENGTH_SHORT).show();
         }else {
-            if (imageNoteRadio.isChecked()) {
+            if (photoNoteRadio.isChecked()) {
                 String photoNoteText = photoNoteEditText.getText().toString();
 
                 if (photoNoteText.isEmpty()) {

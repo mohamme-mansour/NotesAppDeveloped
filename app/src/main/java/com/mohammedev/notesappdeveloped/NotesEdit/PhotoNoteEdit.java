@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.mohammedev.notesappdeveloped.R;
 import com.mohammedev.notesappdeveloped.classes.PhotoNote;
-import com.mohammedev.notesappdeveloped.extra.Constants;
+import com.mohammedev.notesappdeveloped.utils.Constants;
 import com.mohammedev.notesappdeveloped.room.ViewModels.NoteViewModel;
 
 import java.io.ByteArrayOutputStream;

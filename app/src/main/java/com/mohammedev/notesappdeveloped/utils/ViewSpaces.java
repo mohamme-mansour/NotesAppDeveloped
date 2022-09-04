@@ -1,4 +1,4 @@
-package com.mohammedev.notesappdeveloped.extra;
+package com.mohammedev.notesappdeveloped.utils;
 
 import android.graphics.Rect;
 import android.view.View;
