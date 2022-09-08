@@ -1,6 +1,8 @@
 package com.mohammedev.notesappdeveloped.Adapters;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> implements Serializable
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> implements Parcelable
 {
 
     public List<Note> notesArray = new ArrayList<>();
@@ -42,6 +44,21 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         this.mItemLongClickListener = mItemLongClickListener;
         this.mItemClickListener = mItemClickListener;
     }
+
+    protected NotesAdapter(Parcel in) {
+    }
+
+    public static final Creator<NotesAdapter> CREATOR = new Creator<NotesAdapter>() {
+        @Override
+        public NotesAdapter createFromParcel(Parcel in) {
+            return new NotesAdapter(in);
+        }
+
+        @Override
+        public NotesAdapter[] newArray(int size) {
+            return new NotesAdapter[size];
+        }
+    };
 
     @Override
     public int getItemViewType(int position)
@@ -104,6 +121,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             return notesArray.size();
         }
 
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
     }
 
     public static class NotesViewHolder extends RecyclerView.ViewHolder implements Serializable{
@@ -269,4 +295,5 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
             }
         }
     }
+
 }

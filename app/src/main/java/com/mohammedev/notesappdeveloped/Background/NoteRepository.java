@@ -134,6 +134,7 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(Note... notes) {
             mNotesDao.insert(notes[0]);
+            Thread.currentThread().setName("Insert Normal Note Thread");
 
             return null;
         }
@@ -150,6 +151,7 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(Note... notes) {
             noteDao.delete(notes[0]);
+            Thread.currentThread().setName("Delete Normal Note Thread");
 
             return null;
         }
@@ -194,6 +196,7 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(Note... notes) {
             noteDao.update(notes[0]);
+            Thread.currentThread().setName("Update Normal Note Thread");
 
             return null;
         }
@@ -210,6 +213,7 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(PhotoNote... photoNotes) {
             mPhotoNotesDao.insert(photoNotes[0]);
+            Thread.currentThread().setName("Insert Photo Note Thread");
 
             return null;
         }
@@ -227,6 +231,8 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(PhotoNote... photoNotes) {
             mPhotoNoteDao.delete(photoNotes[0]);
+            Thread.currentThread().setName("Delete Photo Note Thread");
+
             return null;
         }
     }
@@ -242,6 +248,8 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(PhotoNote... photoNotes) {
             mPhotoNoteDao.update(photoNotes[0]);
+            Thread.currentThread().setName("Update Photo Note Thread");
+
             return null;
         }
     }
@@ -256,6 +264,7 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(CheckNote... checkNotes) {
             mCheckNoteDao.insert(checkNotes[0]);
+            Thread.currentThread().setName("Insert Check Note Thread");
 
             return null;
         }
@@ -272,6 +281,8 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(CheckNote... checkNotes) {
             mCheckNoteDao.delete(checkNotes[0]);
+            Thread.currentThread().setName("Delete Check Note Thread");
+
             return null;
         }
     }
@@ -287,6 +298,8 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(CheckNote... checkNotes) {
             mCheckNoteDao.update(checkNotes[0]);
+            Thread.currentThread().setName("Update Check Note Thread");
+
             return null;
         }
     }

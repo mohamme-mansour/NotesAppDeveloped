@@ -161,7 +161,9 @@
                 android:fontFamily="@font/cairo"
                 android:gravity="top"
                 android:hint="@string/add_note_text"
-                android:padding="16dp" />
+                android:padding="16dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
 
         </RelativeLayout>
 
@@ -231,12 +233,12 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/cairo"
                 android:gravity="top"
                 android:hint="@string/add_note_text"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
                 app:layout_constraintBottom_toTopOf="@+id/checkNoteCheckBox"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

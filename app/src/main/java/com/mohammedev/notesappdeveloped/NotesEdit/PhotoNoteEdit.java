@@ -1,5 +1,6 @@
 package com.mohammedev.notesappdeveloped.NotesEdit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.mohammedev.notesappdeveloped.R;
 import com.mohammedev.notesappdeveloped.classes.PhotoNote;
+import com.mohammedev.notesappdeveloped.utils.AppExecutor;
 import com.mohammedev.notesappdeveloped.utils.Constants;
 import com.mohammedev.notesappdeveloped.room.ViewModels.NoteViewModel;
 
@@ -37,6 +39,7 @@ public class PhotoNoteEdit extends AppCompatActivity {
     private int Position;
     public String newText;
     private NoteViewModel mNoteViewModel;
+    private AppExecutor appExecutor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,8 @@ public class PhotoNoteEdit extends AppCompatActivity {
         photoNoteEditImageView = findViewById(R.id.photoImageView);
         changeBtn = findViewById(R.id.changeBtn);
         constraintLayout = findViewById(R.id.ConstraintLayout);
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        appExecutor = AppExecutor.getInstance();
+
         PhotoNote photoNote = (PhotoNote) getIntent().getSerializableExtra("photoNote");
         Bundle bundle = getIntent().getExtras();
 
@@ -72,25 +76,28 @@ public class PhotoNoteEdit extends AppCompatActivity {
             {
                 newText = photoNoteEditEditText.getText().toString();
 
-                if (mSelectedPhotoUri != null)
-                {
-                    PhotoNote photoNoteRoom = new PhotoNote(photoNote.getColor(), newText, mSelectedPhotoUri);
-                    photoNoteRoom.setId(Position);
-                    mNoteViewModel.updatePhotoNote(photoNoteRoom);
-//                    newIntent.putExtra("Photo", mSelectedPhotoUri);
-//                    newIntent.putExtra("NewTextPhoto", newText);
-//                    newIntent.putExtra("Position2", Position);
-                }else{
-                    BitmapDrawable drawable = (BitmapDrawable) photoNoteEditImageView.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
-                    PhotoNote photoNoteRoom = new PhotoNote(photoNote.getColor(), newText, getImageUri(PhotoNoteEdit.this,bitmap));
-                    photoNoteRoom.setId(Position);
-                    mNoteViewModel.updatePhotoNote(photoNoteRoom);
-//                    newIntent.putExtra("Photo", getImageUri(PhotoNoteEdit.this , bitmap));
-//                    newIntent.putExtra("Position2", Position);
-//                    newIntent.putExtra("NewTextPhoto", newText);
-                }
-                finish();
+                appExecutor.getMainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mSelectedPhotoUri != null)
+                        {
+                            PhotoNote photoNoteRoom = new PhotoNote(photoNote.getColor(), newText, mSelectedPhotoUri);
+                            photoNoteRoom.setId(Position);
+                            mNoteViewModel.updatePhotoNote(photoNoteRoom);
+                        }else{
+                            BitmapDrawable drawable = (BitmapDrawable) photoNoteEditImageView.getDrawable();
+                            Bitmap bitmap = drawable.getBitmap();
+                            PhotoNote photoNoteRoom = new PhotoNote(photoNote.getColor(), newText, getImageUri(PhotoNoteEdit.this,bitmap));
+                            photoNoteRoom.setId(Position);
+                            mNoteViewModel.updatePhotoNote(photoNoteRoom);
+                        }
+                        Intent returnIntent = new Intent();
+                        setResult(Activity.RESULT_OK,returnIntent);
+                        finish();
+                    }
+                });
+
+
 
             }
         });

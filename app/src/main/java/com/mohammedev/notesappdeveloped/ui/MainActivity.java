@@ -1,5 +1,6 @@
 package com.mohammedev.notesappdeveloped.ui;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -36,11 +38,12 @@ import com.mohammedev.notesappdeveloped.room.ViewModels.NoteViewModel;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final int EDIT_CODE = 31;
     private NotesAdapter mNotesAdapter;
     private NoteViewModel mNoteViewModel;
     ActivityMainBinding activityMainBinding;
     AppExecutor mAppExecutor;
+     boolean reloadNeed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         mAppExecutor = AppExecutor.getInstance();
+
+
 
         findViewById(R.id.floating_button_add).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,11 +71,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLongClickItem(int position) {
                 removeNote(position);
+                mNotesAdapter.notifyDataSetChanged();
             }
         }, new ItemClickListener() {
             @Override
             public void onClickListener(int position) {
                 editNote(position);
+                mNotesAdapter.notifyDataSetChanged();
             }
         });
 
@@ -151,6 +158,9 @@ public class MainActivity extends AppCompatActivity {
         }).attachToRecyclerView(activityMainBinding.recyclerViewPhotos);
     }
 
+
+
+
     private void removeNote(int position) {
         Toast.makeText(this, position + " , " + mNotesAdapter.notesArray.size() + " , " + mNotesAdapter.getNoteAt(position).getId() , Toast.LENGTH_SHORT).show();
         AlertDialog alertDialog = new AlertDialog.Builder(this )
@@ -158,20 +168,36 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mAppExecutor.getMainThread().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (mNotesAdapter.getNoteAt(position) instanceof PhotoNote) {
+
+                        if (mNotesAdapter.getNoteAt(position) instanceof PhotoNote) {
+                            mAppExecutor.getMainThread().execute(new Runnable() {
+                                @Override
+                                public void run() {
                                     mNoteViewModel.deletePhotoNote((PhotoNote) mNotesAdapter.getNoteAt(position));
-                                } else if (mNotesAdapter.getNoteAt(position) instanceof CheckNote) {
-                                    mNoteViewModel.deleteCheckNote((CheckNote) mNotesAdapter.getNoteAt(position));
-                                } else {
-                                    mNoteViewModel.deleteNormalNote(mNotesAdapter.getNoteAt(position));
                                 }
-                                mNotesAdapter.notifyItemRemoved(position);
-                            }
-                        });
+                            });
+
+                        } else if (mNotesAdapter.getNoteAt(position) instanceof CheckNote) {
+                            mAppExecutor.getMainThread().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mNoteViewModel.deleteCheckNote((CheckNote) mNotesAdapter.getNoteAt(position));
+                                }
+                            });
+
+                        } else {
+                            mAppExecutor.getMainThread().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mNoteViewModel.deleteNormalNote(mNotesAdapter.getNoteAt(position));
+
+                                }
+                            });
+                        }
+                        mNotesAdapter.notifyItemRemoved(position);
+
                     }
+
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -185,6 +211,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_CODE && resultCode == RESULT_OK){
+            finish();
+            startActivity(getIntent());
+        }
+    }
+
     private void editNote(int position) {
         Note noteEdit = mNotesAdapter.getNoteAt(position);
         if (noteEdit instanceof PhotoNote) {
@@ -192,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
             Intent photoNoteIntent = new Intent(MainActivity.this, PhotoNoteEdit.class);
             photoNoteIntent.putExtra("photoNote", (Parcelable) photoNote);
             photoNoteIntent.putExtra(Constants.EXTRA_ID, photoNote.getId());
-            startActivity(photoNoteIntent);
+            startActivityForResult(photoNoteIntent , EDIT_CODE);
 
         } else if (noteEdit instanceof CheckNote) {
             CheckNote checkNote = (CheckNote) noteEdit;
@@ -201,14 +236,14 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Constants.EXTRA_NOTE_TEXT, checkNote.getNote());
             intent.putExtra(Constants.COLOR, checkNote.getColor());
             intent.putExtra("CheckBox status", checkNote.getCheckBox());
-            startActivity(intent);
+            startActivityForResult(intent , EDIT_CODE);
 
         } else {
             Intent intent = new Intent(MainActivity.this, NormalNoteEdit.class);
             intent.putExtra(Constants.EXTRA_ID, noteEdit.getId());
             intent.putExtra(Constants.EXTRA_NOTE_TEXT, noteEdit.getNote());
             intent.putExtra(Constants.COLOR, noteEdit.getColor());
-            startActivity(intent);
+            startActivityForResult(intent , EDIT_CODE);
         }
     }
 }
